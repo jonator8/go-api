@@ -12,8 +12,6 @@ type HealthCheckResponse struct {
 
 func HealthCheckController(app *internal.App) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-
 		response := HealthCheckResponse{
 			Message: "API is up and running",
 		}
