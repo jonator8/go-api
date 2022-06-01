@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	ctx, cancel := context.WithCancel(context.Background())
+	_, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	logger := log.Logger{}
 
@@ -38,23 +38,14 @@ func main() {
 
 	sqlDb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(dsn)))
 	db := bun.NewDB(sqlDb, pgdialect.New())
+	cmd := internal.NewCommandsBootstrap(db)
 
-	_, err = db.Conn(ctx)
-	if err != nil {
-		logger.Fatal("ERROR: ", err)
-	}
-
-	err = db.Close()
-	if err != nil {
-		logger.Fatal("ERROR: ", err)
-	}
-
-	app := internal.NewApp(&logger)
+	app := internal.NewApp(&logger, cmd)
 
 	router := mux.NewRouter()
 	apiRouter := router.PathPrefix("/api/v1").Subrouter()
 	apiRouter.HandleFunc("/healthcheck", controllers.HealthCheckController(app)).Methods(http.MethodGet)
-	apiRouter.HandleFunc("/seed", controllers.HealthCheckController(app)).Methods(http.MethodPost)
+	apiRouter.HandleFunc("/seed", controllers.SeedController(app)).Methods(http.MethodPost)
 
 	err = http.ListenAndServe(":"+conf.App.Port, router)
 	if err != nil {

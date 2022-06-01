@@ -1,10 +1,17 @@
 package models
 
-import "github.com/google/uuid"
+import (
+	"github.com/google/uuid"
+	"github.com/uptrace/bun"
+	"time"
+)
 
 type New struct {
-	Id       uuid.UUID
-	Title    string
-	Body     string
-	comments []Comment
+	bun.BaseModel `bun:"table:news,alias:n"`
+
+	Id        uuid.UUID `bun:"id,pk,type:uuid"`
+	Title     string
+	Body      string
+	CreatedAt time.Time `bun:",nullzero,notnull,default:current_timestamp"`
+	UpdatedAt time.Time `bun:",nullzero,notnull,default:current_timestamp"`
 }

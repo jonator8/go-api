@@ -1,15 +1,20 @@
 package internal
 
-import "log"
+import (
+	"log"
+)
 
 type App struct {
-	Logger *log.Logger
+	Logger  *log.Logger
+	Command *CommandsBootstrap
 }
 
 func NewApp(
 	logger *log.Logger,
+	cmd *CommandsBootstrap,
 ) *App {
 	return &App{
-		Logger: logger,
+		Logger:  logger,
+		Command: cmd,
 	}
 }
