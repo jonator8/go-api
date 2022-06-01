@@ -2,5 +2,12 @@
   "host": {
     "address": "localhost",
     "port": 3000
+  },
+  "database": {
+    "user": "admin",
+    "password": "12345678",
+    "name": "postgres",
+    "host": "localhost",
+    "port": "5432"
   }
 }

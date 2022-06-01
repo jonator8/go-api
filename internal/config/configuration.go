@@ -7,11 +7,29 @@ import (
 
 type Config struct {
 	App AppConfig
+	Db  DataBaseConfig
 }
 
+type DataBaseConfig struct {
+	Host     string
+	Port     string
+	User     string
+	Password string
+	Database string
+}
 type AppConfig struct {
 	Host string
 	Port string
+}
+
+func getDataBaseConfiguration(v *viper.Viper) DataBaseConfig {
+	return DataBaseConfig{
+		Host:     v.GetString("database.host"),
+		Port:     v.GetString("database.port"),
+		User:     v.GetString("database.user"),
+		Password: v.GetString("database.password"),
+		Database: v.GetString("database.name"),
+	}
 }
 
 func getAppConfiguration(v *viper.Viper) AppConfig {
@@ -34,5 +52,6 @@ func GetConfiguration() (Config, error) {
 
 	return Config{
 		App: getAppConfiguration(v),
+		Db:  getDataBaseConfiguration(v),
 	}, nil
 }
