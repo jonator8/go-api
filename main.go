@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/jonator8/go-api/internal/controllers"
 	"net/http"
 )
 
@@ -13,19 +14,10 @@ func main() {
 	router := mux.NewRouter()
 
 	apiRouter := router.PathPrefix("/api/v1").Subrouter()
-	apiRouter.HandleFunc("/healthcheck", HealthCheck).Methods(http.MethodGet)
-	http.Handle("/", router)
+	apiRouter.HandleFunc("/healthcheck", controllers.HealthCheck).Methods(http.MethodGet)
 
 	err := http.ListenAndServe(":8080", router)
 	if err != nil {
 		fmt.Println("ERROR: ", err)
 	}
-}
-
-func HealthCheck(w http.ResponseWriter, r *http.Request) {
-	//specify status code
-	w.WriteHeader(http.StatusOK)
-
-	//update response writer
-	fmt.Fprintf(w, "API is up and running")
 }
