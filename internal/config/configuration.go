@@ -22,36 +22,35 @@ type AppConfig struct {
 	Port string
 }
 
-func getDataBaseConfiguration(v *viper.Viper) DataBaseConfig {
+func getDataBaseConfiguration() DataBaseConfig {
 	return DataBaseConfig{
-		Host:     v.GetString("database.host"),
-		Port:     v.GetString("database.port"),
-		User:     v.GetString("database.user"),
-		Password: v.GetString("database.password"),
-		Database: v.GetString("database.name"),
+		Host:     viper.GetString("database.host"),
+		Port:     viper.GetString("database.port"),
+		User:     viper.GetString("database.user"),
+		Password: viper.GetString("database.password"),
+		Database: viper.GetString("database.name"),
 	}
 }
 
-func getAppConfiguration(v *viper.Viper) AppConfig {
+func getAppConfiguration() AppConfig {
 	return AppConfig{
-		Host: v.GetString("host.address"),
-		Port: v.GetString("host.port"),
+		Host: viper.GetString("host.address"),
+		Port: viper.GetString("host.port"),
 	}
 }
 
 func GetConfiguration() (Config, error) {
-	v := viper.New()
-	v.SetConfigName("config")
-	v.SetConfigType("json")
-	v.AddConfigPath("./internal/config")
+	viper.SetConfigName("config")
+	viper.SetConfigType("json")
+	viper.AddConfigPath("./internal/config")
 
-	err := v.ReadInConfig()
+	err := viper.ReadInConfig()
 	if err != nil {
 		return Config{}, fmt.Errorf("error reading in config: %s", err)
 	}
 
 	return Config{
-		App: getAppConfiguration(v),
-		Db:  getDataBaseConfiguration(v),
+		App: getAppConfiguration(),
+		Db:  getDataBaseConfiguration(),
 	}, nil
 }

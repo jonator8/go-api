@@ -20,12 +20,12 @@ func HealthCheckController(app *internal.App) http.HandlerFunc {
 		w.WriteHeader(http.StatusOK)
 		jsonResponse, err := json.Marshal(response)
 		if err != nil {
-			app.Logger.Fatal("healthCheckController: ", err)
+			app.Logger.Error("healthCheckController: ", err)
 		}
 
 		_, err = w.Write(jsonResponse)
 		if err != nil {
-			app.Logger.Fatal("healthCheckController: ", err)
+			app.Logger.Error("healthCheckController: ", err)
 		}
 	}
 }

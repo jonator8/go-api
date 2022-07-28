@@ -21,16 +21,21 @@ func SeedController(app *internal.App) http.HandlerFunc {
 			return
 		}
 
+		err = app.Commands.Seed.Handle(r.Context())
+		if err != nil {
+			app.Logger.Error("seed_controller: ", err)
+		}
+		message := "asd"
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		jsonResponse, err := json.Marshal(req)
+		jsonResponse, err := json.Marshal(message)
 		if err != nil {
-			app.Logger.Fatal("send_controller: ", err)
+			app.Logger.Error("seed_controller: ", err)
 		}
 
 		_, err = w.Write(jsonResponse)
 		if err != nil {
-			app.Logger.Fatal("send_controller: ", err)
+			app.Logger.Error("seed_controller: ", err)
 		}
 	}
 }

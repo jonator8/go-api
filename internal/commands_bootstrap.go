@@ -7,7 +7,8 @@ import (
 )
 
 type CommandsBootstrap struct {
-	Seed commands.SeedCommandHandler
+	Seed      commands.SeedCommandHandler
+	CreateNew commands.CreateNewCommandHandler
 }
 
 func NewCommandsBootstrap(
@@ -17,6 +18,9 @@ func NewCommandsBootstrap(
 
 	return &CommandsBootstrap{
 		Seed: commands.NewSeedCommandHandler(
+			writeNewsRepository,
+		),
+		CreateNew: commands.NewCreateNewCommandHandler(
 			writeNewsRepository,
 		),
 	}
