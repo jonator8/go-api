@@ -44,14 +44,16 @@ func main() {
 	sqlDb := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(dsn)))
 	db := bun.NewDB(sqlDb, pgdialect.New())
 	cmd := internal.NewCommandsBootstrap(db)
+	queries := internal.NewQueriesBootstrap(db)
 
-	app := internal.NewApp(logger, cmd)
+	app := internal.NewApp(logger, cmd, queries)
 
 	router := mux.NewRouter()
 	apiRouter := router.PathPrefix("/api/v1").Subrouter()
 	apiRouter.HandleFunc("/healthcheck", controllers.HealthCheckController(app)).Methods(http.MethodGet)
 	apiRouter.HandleFunc("/seed", controllers.SeedController(app)).Methods(http.MethodPost)
-	apiRouter.HandleFunc("/news", controllers.CreateNewController(app)).Methods(http.MethodGet)
+	apiRouter.HandleFunc("/news", controllers.CreateNewController(app)).Methods(http.MethodPost)
+	apiRouter.HandleFunc("/news", controllers.GetNewsController(app)).Methods(http.MethodGet)
 
 	fmt.Println("API listening at " + conf.App.Host + ":" + conf.App.Port)
 	err = http.ListenAndServe(conf.App.Host+":"+conf.App.Port, router)

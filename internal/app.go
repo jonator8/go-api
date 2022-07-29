@@ -10,6 +10,7 @@ import (
 type App struct {
 	Logger     *logrus.Logger
 	Commands   *CommandsBootstrap
+	Queries    *QueriesBootstrap
 	Validator  *validator.Validate
 	Translator *ut.Translator
 }
@@ -17,6 +18,7 @@ type App struct {
 func NewApp(
 	logger *logrus.Logger,
 	cmd *CommandsBootstrap,
+	queries *QueriesBootstrap,
 ) *App {
 	english := en.New()
 	universal := ut.New(english, english)
@@ -28,6 +30,7 @@ func NewApp(
 	return &App{
 		Logger:     logger,
 		Commands:   cmd,
+		Queries:    queries,
 		Validator:  val,
 		Translator: &trans,
 	}
